@@ -56,5 +56,30 @@
     }
   };
 
-  // ADD YOUR CODE HERE
+  $('#search').attr('required', true)
+
+  $("form").on("submit", function(event) {
+    event.preventDefault()
+
+    movies.splice(0)
+
+    let search = $("#search").val()
+    let $xhr = $.getJSON(`https://omdb-api.now.sh/?s=${search}`)
+
+    $xhr.done(function (data) {
+
+      console.log(data);
+      for (let movie in data.Search) {
+
+        let newTitle = {};
+         newTitle['poster'] = data.Search[movie].Poster;
+         newTitle['title'] = data.Search[movie].Title;
+         newTitle['id'] = data.Search[movie].imdbId;
+         newTitle['year'] = data.Search[movie].Year;
+         movies.push(newTitle);
+
+      }
+      renderMovies();
+    })
+  })
 })();
